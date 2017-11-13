@@ -18,3 +18,23 @@ def dist(p1, p2):
     # return the integer ceiling of the distances to ensure that rounding does
     # not produce overlapping points.
     return int(m.ceil(m.sqrt((pow(delta_x, 2) + pow(delta_y, 2)))))
+
+
+class TSPDistance(object):
+    '''A class definition for a TSP distance object.'''
+
+    def __init__(self, tourlist, citydict):
+        self.best_c = []
+        self.tourlist = tourlist
+        self.citydict = citydict
+        for i in self.tourlist:
+            self.best_c.append(self.citydict.get(i))
+        self.cost = self.total_distance(self.best_c)
+
+    def total_distance(self, best_c):
+        '''given a list of coordinates, iterate and calculate the distance
+           between two points found sequentially, representing a tour. Sum the
+           results and return.'''
+
+        best_c = self.best_c
+        return sum(dist(u, v) for u, v in zip(best_c[:-1], best_c[1:]))
