@@ -25,11 +25,13 @@ class TSPDistance(object):
 
     def __init__(self, tourlist, citydict):
         self.best_c = []
+        self.dimension = len(citydict)
         self.tourlist = tourlist
         self.citydict = citydict
         for i in self.tourlist:
             self.best_c.append(self.citydict.get(i))
         self.cost = self.total_distance(self.best_c)
+        self.distance_map = self.generate_distance_map(citydict)
 
     def total_distance(self, best_c):
         '''given a list of coordinates, iterate and calculate the distance
@@ -38,3 +40,23 @@ class TSPDistance(object):
 
         best_c = self.best_c
         return sum(dist(u, v) for u, v in zip(best_c[:-1], best_c[1:]))
+
+    def generate_distance_map(self, citydict):
+        '''given a city dictionary generate an Euclidean distance map.'''
+        dist_map = []
+        row = []
+        for i in range(1, self.dimension + 1):
+            for j in range(1, self.dimension + 1):
+                u = 0
+                v = 0
+                for x in zip(self.citydict.get(i)[:-1], self.citydict.get(i)[1:]):
+                    u = x
+                for x in zip(self.citydict.get(j)[:-1], self.citydict.get(j)[1:]):
+                    v = x
+                row.append(dist(u, v))
+
+            print(row)
+            dist_map.append(row)
+            row = []
+            
+        return dist_map
